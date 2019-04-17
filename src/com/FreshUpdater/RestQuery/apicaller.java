@@ -16,6 +16,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
 public class apicaller {
+	
+	private Hibertester newuser;
 
 	public apicaller() throws ClientProtocolException, IOException {
 		HttpGet newget = new HttpGet("https://servicedesk.freshservice.com/itil/requesters.json");
@@ -29,8 +31,9 @@ public class apicaller {
 
 		CloseableHttpResponse newresponse = newclient.execute(newget);
 
+		newuser = new com.FreshUpdater.RestQuery.Hibertester();
 		JsonFactory allapiusers = new JsonFactory();
-
+	
 		JsonParser allusersparser = allapiusers.createParser(newresponse.getEntity().getContent());
 		JsonToken newusertoken;
 		while ((newusertoken = allusersparser.nextToken()) != null) {
@@ -43,39 +46,39 @@ public class apicaller {
 					switch (currentfield) {
 
 					case "name":
-						//newuser.setName(allusersparser.getText());
+						newuser.setName(allusersparser.getText());
 						System.out.println(allusersparser.getText());
 						break;
 					case "id":
-						//newuser.setUserID(allusersparser.getIntValue());
+						newuser.setUserID(allusersparser.getText());
 						System.out.println(allusersparser.getText());
 						break;
 					case "email":
-					//	newuser.setEmail(allusersparser.getText());
+						newuser.setEmail(allusersparser.getText());
 						System.out.println(allusersparser.getText());
 						break;
 					case "active":
-						//newuser.setActive(allusersparser.getText());
+						newuser.setActive(allusersparser.getText());
 						System.out.println(allusersparser.getText());
 						break;
 					case "address":
-						//newuser.setAddress(allusersparser.getText());
+						newuser.setAddress(allusersparser.getText());
 						System.out.println(allusersparser.getText());
 						break;
 					case "job_title":
-						//newuser.setJob_title(allusersparser.getText());
+						newuser.setJob_title(allusersparser.getText());
 						System.out.println(allusersparser.getText());
 						break;
 					case "phone":
-						//newuser.setPhone(allusersparser.getText());
+						newuser.setPhone(allusersparser.getText());
 						System.out.println(allusersparser.getText());
 						break;
 					case "location_name":
-						//newuser.setLocation_name(allusersparser.getText());
+						newuser.setLocation_name(allusersparser.getText());
 						System.out.println(allusersparser.getText());
 						break;
 					case "deleted":
-						//newuser.setDeleted(allusersparser.getText());
+						newuser.setDeleted(allusersparser.getText());
 						System.out.println(allusersparser.getText());
 						break;
 
