@@ -43,5 +43,18 @@
     <artifactId>hibernate-core</artifactId>
     <version>6.0.0.Alpha2</version>
 </dependency>
+
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-c3p0</artifactId>
+    <version>5.4.2.Final</version>
+</dependency>
+
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId>
+    <version>1.7.26</version>
+    <scope>test</scope>
+</dependency>
   </dependencies>
 </project>

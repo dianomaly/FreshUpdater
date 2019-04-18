@@ -2,10 +2,9 @@ package com.FreshUpdater.RestQuery;
 
 import org.hibernate.Session;
 
-import com.testrest.cooler.sqlapiuserobj;
 
 public class Hibertester {
-	private static int ID;
+	//private static int ID;
 	private static String userID;
 	private static String active;
 	private static String email;
@@ -16,26 +15,30 @@ public class Hibertester {
 	private static String location_name;
 	private static String deleted;
 
-	public void Hibertester() {
+	public Hibertester() {
 	}
 
 	public static void setsqluser() {
-
-		Session session = hiberUtils.getSession().openSession();
+		
+		System.out.println(active);
+		System.out.println(userID);
+		System.out.println(name);
+		
+		Session session = HiberUtils.getSession().openSession();
 		session.beginTransaction();
 
-		sqlapiuserobj newuser = new sqlapiuserobj();
+		getallapiuserobj newuser = new getallapiuserobj();
 
-		newuser.setID(ID);
+		//newuser.setID(ID);
 		newuser.setActive(active);
 		newuser.setAddress(address);
 		newuser.setDeleted(deleted);
 		newuser.setEmail(email);
-		newuser.setJob_title(job_title);
-		newuser.setLocation_name(location_name);
+		newuser.setJobtitle(job_title);
+		newuser.setLocationname(location_name);
 		newuser.setName(name);
 		newuser.setPhone(phone);
-		//newuser.setUserID(userID);
+		newuser.setUserID(userID);
 
 		session.save(newuser);
 		session.getTransaction().commit();
@@ -49,43 +52,43 @@ public class Hibertester {
 		 */
 		session.close();
 
-		hiberUtils.shutdown();
+		HiberUtils.shutdown();
 
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public static void setUserID(String userID) {
+		Hibertester.userID = userID;
 	}
 
-	public void setActive(String active) {
-		this.active = active;
+	public static void setActive(String active) {
+		Hibertester.active = active;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public static void setEmail(String email) {
+		Hibertester.email = email;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public static void setName(String name) {
+		Hibertester.name = name;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public static void setAddress(String address) {
+		Hibertester.address = address;
 	}
 
-	public void setJob_title(String job_title) {
-		this.job_title = job_title;
+	public static void setJob_title(String job_title) {
+		Hibertester.job_title = job_title;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public static void setPhone(String phone) {
+		Hibertester.phone = phone;
 	}
 
-	public void setLocation_name(String location_name) {
-		this.location_name = location_name;
+	public static void setLocation_name(String location_name) {
+		Hibertester.location_name = location_name;
 	}
 
-	public void setDeleted(String deleted) {
-		this.deleted = deleted;
+	public static void setDeleted(String deleted) {
+		Hibertester.deleted = deleted;
 	}
 }

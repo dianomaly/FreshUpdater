@@ -31,7 +31,7 @@ public class apicaller {
 
 		CloseableHttpResponse newresponse = newclient.execute(newget);
 
-		newuser = new com.FreshUpdater.RestQuery.Hibertester();
+		//newuser = new com.FreshUpdater.RestQuery.Hibertester();
 		JsonFactory allapiusers = new JsonFactory();
 	
 		JsonParser allusersparser = allapiusers.createParser(newresponse.getEntity().getContent());
@@ -46,40 +46,61 @@ public class apicaller {
 					switch (currentfield) {
 
 					case "name":
-						newuser.setName(allusersparser.getText());
-						System.out.println(allusersparser.getText());
+						if (allusersparser.getText() != "name" ) {
+						Hibertester.setName(allusersparser.getText());
+						//System.out.println(allusersparser.getText());
+						}
 						break;
 					case "id":
-						newuser.setUserID(allusersparser.getText());
+						if (allusersparser.getText() != "id" ) {
+						//String stUserID = allusersparser.getText();
+					//	int userID = Integer.parseInt(stUserID);
+						//System.out.println(userID);
+						Hibertester.setUserID(allusersparser.getText());
 						System.out.println(allusersparser.getText());
+						}
 						break;
 					case "email":
-						newuser.setEmail(allusersparser.getText());
+						if (allusersparser.getText() != "email" ) {
+						Hibertester.setEmail(allusersparser.getText());
 						System.out.println(allusersparser.getText());
+						}
 						break;
 					case "active":
-						newuser.setActive(allusersparser.getText());
+						if (allusersparser.getText() != "active" ) {
+						Hibertester.setActive(allusersparser.getText());
 						System.out.println(allusersparser.getText());
+						}
 						break;
 					case "address":
-						newuser.setAddress(allusersparser.getText());
+						if (allusersparser.getText() != "address" ) {
+						Hibertester.setAddress(allusersparser.getText());
 						System.out.println(allusersparser.getText());
+						}
 						break;
 					case "job_title":
-						newuser.setJob_title(allusersparser.getText());
+						if (allusersparser.getText() != "job_title") {
+						Hibertester.setJob_title(allusersparser.getText());
 						System.out.println(allusersparser.getText());
+						}
 						break;
 					case "phone":
-						newuser.setPhone(allusersparser.getText());
+						if (allusersparser.getText() != "phone" ) {
+						Hibertester.setPhone(allusersparser.getText());
 						System.out.println(allusersparser.getText());
+						}
 						break;
 					case "location_name":
-						newuser.setLocation_name(allusersparser.getText());
+						if (allusersparser.getText() != "location_name" ) {
+						Hibertester.setLocation_name(allusersparser.getText());
 						System.out.println(allusersparser.getText());
+						}
 						break;
 					case "deleted":
-						newuser.setDeleted(allusersparser.getText());
+						if (allusersparser.getText() != "deleted" ) {
+						Hibertester.setDeleted(allusersparser.getText());
 						System.out.println(allusersparser.getText());
+						}
 						break;
 
 					}
@@ -87,8 +108,7 @@ public class apicaller {
 					// String curfieldvalue = allusersparser.getText();
 
 					// System.out.println(newusertoken);
-					// System.out.printf("%s: %s%n", currentfield, curfieldvalue);
-					//newuser.setsqluser();
+					Hibertester.setsqluser();
 				}
 			}
 		
