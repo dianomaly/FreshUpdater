@@ -2,47 +2,50 @@ package com.FreshUpdater.RestQuery;
 
 import org.hibernate.Session;
 
+import com.FreshUpdater.Models.freshapiuserobj;
+import com.FreshUpdater.Models.getallapiuserobj;
+import com.mysql.cj.Query;
+
 
 public class Hibertester {
 	//private static int ID;
-	private static String userID;
-	private static String active;
+	private static int userID;
+	private static String first_name;
 	private static String email;
-	private static String name;
+	private static String last_name;;
 	private static String address;
 	private static String job_title;
 	private static String phone;
-	private static String location_name;
-	private static String deleted;
+	private static int locationid;
+	
 
 	public Hibertester() {
 	}
 
 	public static void setsqluser() {
 		
-		System.out.println(active);
-		System.out.println(userID);
-		System.out.println(name);
-		
+				
 		Session session = HiberUtils.getSession().openSession();
 		session.beginTransaction();
 
-		getallapiuserobj newuser = new getallapiuserobj();
+		freshapiuserobj newuser = new freshapiuserobj();
 
 		//newuser.setID(ID);
-		newuser.setActive(active);
+		newuser.setUserID(userID);
+		newuser.setFirst_name(first_name);
+		newuser.setLast_name(last_name);
 		newuser.setAddress(address);
-		newuser.setDeleted(deleted);
 		newuser.setEmail(email);
 		newuser.setJobtitle(job_title);
-		newuser.setLocationname(location_name);
-		newuser.setName(name);
+		newuser.setLocationid(locationid);
 		newuser.setPhone(phone);
-		newuser.setUserID(userID);
-
+		
+		org.hibernate.query.Query validatequery = session.createQuery("from freshapiuserobj where freshapiuserobj.userID = :userID").setParameter("userID", newuser.getUserID()); //where apiusertable.userID = :userID").setParameter("userID", userID);
+		System.out.println(validatequery);
+		if(validatequery == null) {
 		session.save(newuser);
 		session.getTransaction().commit();
-
+		}
 		/*
 		 * session.beginTransaction();
 		 * 
@@ -56,20 +59,12 @@ public class Hibertester {
 
 	}
 
-	public static void setUserID(String userID) {
+	public static void setUserID(int userID) {
 		Hibertester.userID = userID;
 	}
-
-	public static void setActive(String active) {
-		Hibertester.active = active;
-	}
-
+	
 	public static void setEmail(String email) {
 		Hibertester.email = email;
-	}
-
-	public static void setName(String name) {
-		Hibertester.name = name;
 	}
 
 	public static void setAddress(String address) {
@@ -84,11 +79,18 @@ public class Hibertester {
 		Hibertester.phone = phone;
 	}
 
-	public static void setLocation_name(String location_name) {
-		Hibertester.location_name = location_name;
+	public static void setFirst_name(String first_name) {
+		Hibertester.first_name = first_name;
 	}
 
-	public static void setDeleted(String deleted) {
-		Hibertester.deleted = deleted;
+	public static void setLast_name(String last_name) {
+		Hibertester.last_name = last_name;
 	}
-}
+
+	public static void setLocationid(int locationid) {
+		Hibertester.locationid = locationid;
+	}
+
+	
+
+	}

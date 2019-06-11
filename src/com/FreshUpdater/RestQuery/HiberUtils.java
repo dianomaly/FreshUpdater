@@ -11,6 +11,9 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import com.FreshUpdater.Models.freshapiuserobj;
+import com.FreshUpdater.Models.getallapiuserobj;
+
 
 public class HiberUtils {
 	private static SessionFactory newmeta = null;
@@ -50,6 +53,7 @@ public class HiberUtils {
 			props.put("hibernate.id.new_generator_mappings", "true");
 			newconf.setProperties(props);
 			newconf.addAnnotatedClass(getallapiuserobj.class);
+			newconf.addAnnotatedClass(freshapiuserobj.class);
 			newregistry = new StandardServiceRegistryBuilder().applySettings(newconf.getProperties()).build();
 			// System.out.println("Hibernate Java Config serviceRegistry created");
 			SessionFactory sessionFactory = newconf.buildSessionFactory(newregistry);

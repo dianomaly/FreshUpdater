@@ -1,4 +1,4 @@
-package com.FreshUpdater.RestQuery;
+package com.FreshUpdater.Models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,14 +7,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Table(name = "apiusertable")
 public class getallapiuserobj {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	@GeneratedValue(generator="increment")
+	@GenericGenerator(name="increment", strategy = "increment")
 	@Column(name = "ID")
-	private int ID;
+	private Long idkey;
 	@Column(name = "active")
 	private String active;
 	@Column(name = "address")
@@ -33,12 +36,7 @@ public class getallapiuserobj {
 	private String phone;
 	@Column(name = "userID")
 	private String userID;
-	public int getID() {
-		return ID;
-	}
-	public void setID(int iD) {
-		ID = iD;
-	}
+	
 	public String getActive() {
 		return active;
 	}
@@ -92,6 +90,12 @@ public class getallapiuserobj {
 	}
 	public void setUserID(String userID) {
 		this.userID = userID;
+	}
+	public Long getIdkey() {
+		return idkey;
+	}
+	public void setIdkey(Long idkey) {
+		this.idkey = idkey;
 	}
 	
 	
