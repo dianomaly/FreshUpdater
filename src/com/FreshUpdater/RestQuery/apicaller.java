@@ -60,7 +60,7 @@ public class apicaller {
 				Hibertester.setJob_title(objNode.get("job_title").asText());
 				Hibertester.setEmail(objNode.get("primary_email").asText());
 				Hibertester.setPhone(objNode.get("work_phone_number").asText());
-				Hibertester.setLocationid(objNode.get("address").asInt());
+				Hibertester.setAddress(objNode.get("address").asText());
 				Hibertester.setsqluser();
 
 			}

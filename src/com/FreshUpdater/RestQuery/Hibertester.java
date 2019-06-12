@@ -1,5 +1,8 @@
 package com.FreshUpdater.RestQuery;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.hibernate.Session;
 
 import com.FreshUpdater.Models.freshapiuserobj;
@@ -40,19 +43,15 @@ public class Hibertester {
 		newuser.setLocationid(locationid);
 		newuser.setPhone(phone);
 		
-		org.hibernate.query.Query validatequery = session.createQuery("from freshapiuserobj where freshapiuserobj.userID = :userID").setParameter("userID", newuser.getUserID()); //where apiusertable.userID = :userID").setParameter("userID", userID);
-		System.out.println(validatequery);
-		if(validatequery == null) {
+		org.hibernate.query.Query validatequery = 
+				session.createQuery("select user.email from freshapiuserobj as user where user.email = :objuser").setParameter("objuser", newuser.getEmail()); 
+		System.out.println(validatequery.list());
+		
+		
+		if(validatequery.list().isEmpty()) {
 		session.save(newuser);
 		session.getTransaction().commit();
 		}
-		/*
-		 * session.beginTransaction();
-		 * 
-		 * adUserObj loaduser = (adUserObj) session.get(adUserObj.class, 1);
-		 * 
-		 * session.getTransaction().commit();
-		 */
 		session.close();
 
 		HiberUtils.shutdown();
