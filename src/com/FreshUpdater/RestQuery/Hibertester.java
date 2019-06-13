@@ -48,7 +48,8 @@ public class Hibertester {
 		System.out.println(validatequery.list());
 		
 		
-		if(validatequery.list().isEmpty()) {
+		if((validatequery.list().isEmpty())) {
+		System.out.println(validatequery.list());	
 		session.save(newuser);
 		session.getTransaction().commit();
 		}

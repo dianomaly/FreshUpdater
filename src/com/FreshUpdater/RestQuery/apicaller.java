@@ -6,6 +6,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
+import javax.json.Json;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.ClientProtocolException;
@@ -26,15 +28,22 @@ public class apicaller {
 	private String apiurl = "https://servicedesk.freshservice.com/api/v2/requesters";
 	private String authkey = "lU6OpkRqj2EZVL8cRPBP";
 	private CloseableHttpResponse firstnewresponse;
+	private JsonNode jsonrespobj;
 	
 	public apicaller() throws ClientProtocolException, IOException, URISyntaxException {
-		int pagenumber = 1;
-		setFirstnewresponse(restcall(pagenumber));
-		while(firstnewresponse.getStatusLine().getStatusCode() == 200) {
+		//int pagenumber = 1;
+		setFirstnewresponse(restcall());
+		System.out.println(firstnewresponse.getFirstHeader("link").getValue());
+				
+		while((firstnewresponse.getStatusLine().getStatusCode() == 200) && apiurl != null ) {
 			try {
-				setFirstnewresponse(restcall(pagenumber));
+				System.out.println(firstnewresponse.getStatusLine().getStatusCode());
+				System.out.println(getNextLink(firstnewresponse));
+				
+				setFirstnewresponse(restcall());
 				jsonresponsereader(getFirstnewresponse());
-				pagenumber++;
+				
+				//pagenumber++;
 			} catch (JsonParseException e) {
 				System.out.println(e);
 			}
@@ -47,12 +56,16 @@ public class apicaller {
 			throws JsonParseException, UnsupportedOperationException, IOException {
 		// Accepts HTTP response and parses the json object then commits relevant
 		// response to mysqltable.
+		try {
 		JsonFactory allapiusers = new JsonFactory();
 		JsonParser allusersparser = allapiusers.createParser(newresponse.getEntity().getContent());
 		ObjectMapper newjson = new ObjectMapper();
-		JsonNode jsonrespobj = (JsonNode) newjson.readTree(allusersparser).get("requesters");
-		if (jsonrespobj.isArray()) {
-			for (final JsonNode objNode : jsonrespobj) {
+		JsonNode jsonparsed = (JsonNode) newjson.readTree(allusersparser).get("requesters");
+		setJsonrespobj(jsonparsed);
+		System.out.println(jsonparsed);
+		
+		if (jsonparsed.isArray()) {
+			for (final JsonNode objNode : jsonparsed) {
 				Hibertester.setUserID(objNode.get("id").asInt());
 				Hibertester.setFirst_name(objNode.get("first_name").asText());
 				Hibertester.setLast_name(objNode.get("last_name").asText());
@@ -64,31 +77,79 @@ public class apicaller {
 				Hibertester.setsqluser();
 
 			}
+			
 		}
-
+		}
+		catch(JsonParseException e)
+		{
+			System.err.println("Unable to parse json response");
+			System.err.println(e);
+		}
+		
+		
 	}
 	
-	public CloseableHttpResponse restcall(int pagenumber) throws UnsupportedOperationException, IOException, URISyntaxException {
-		URI uriraw = new URI(apiurl);
-		URIBuilder newuri = new URIBuilder(uriraw);
-		newuri.setParameter("per_page", "100").setParameter("page", Integer.toString(pagenumber));
-		HttpGet newget = new HttpGet(newuri.build());
+	public CloseableHttpResponse restcall() throws UnsupportedOperationException, IOException, URISyntaxException {
+		
+	//	URI uriraw = new URI(apiurl);
+	//	URIBuilder newuri = new URIBuilder(uriraw);
+	//	newuri.setParameter("per_page", "100").setParameter("page", Integer.toString(pagenumber));
+		HttpGet newget = new HttpGet(apiurl);
 		String newauth = authkey + ":";
 		byte[] newauthbytes = Base64.encodeBase64(newauth.getBytes(Charset.forName("US-ASCII")));
 		String authHeader = "Basic " + new String(newauthbytes);
 		newget.addHeader(HttpHeaders.AUTHORIZATION, authHeader);
 		CloseableHttpClient newclient = HttpClients.createDefault();
 		CloseableHttpResponse newresponse = newclient.execute(newget);
+		
+		setApiurl(getNextLink(newresponse));
+		
 		return newresponse;
 		
-	}
+		
 
+	}
+	
+	private String getNextLink(CloseableHttpResponse r) {
+		if(r.getFirstHeader("link") != null){
+	      String link = r.getFirstHeader("link").getValue();   
+	      if (link != null) {
+	         String[] links = link.split(",");
+	         for (String l : links) {               
+	            if (l.contains("rel=\"next\"")) {
+	               String[] tmp1 = l.split("<", 2);
+	               if (tmp1.length == 2) {
+	                  return tmp1[1].split(">", 2)[0];  
+	               }
+	            }
+	         }
+	      }
+		}
+	      return null;
+	   }
+	
 	public CloseableHttpResponse getFirstnewresponse() {
 		return firstnewresponse;
 	}
 
 	public void setFirstnewresponse(CloseableHttpResponse firstnewresponse) {
 		this.firstnewresponse = firstnewresponse;
+	}
+
+	public JsonNode getJsonrespobj() {
+		return jsonrespobj;
+	}
+
+	public void setJsonrespobj(JsonNode jsonrespobj) {
+		this.jsonrespobj = jsonrespobj;
+	}
+
+	public String getApiurl() {
+		return apiurl;
+	}
+
+	public void setApiurl(String apiurl) {
+		this.apiurl = apiurl;
 	}
 
 }
