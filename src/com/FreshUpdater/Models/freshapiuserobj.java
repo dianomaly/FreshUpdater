@@ -1,21 +1,28 @@
 package com.FreshUpdater.Models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 @Entity
 @Table(name = "apiusertable")
-public class freshapiuserobj {
+public class Freshapiuserobj {
 	@Id
 	@GeneratedValue(generator="increment")
 	@GenericGenerator(name="increment", strategy = "increment")
 	@Column(name = "ID")
-	private Long idkey;
+	private int idkey;
 	@Column(name = "userID")
 	private int userID;
 	@Column(name = "first_name")
@@ -32,7 +39,20 @@ public class freshapiuserobj {
 	private int locationid;
 	@Column(name = "phone")
 	private String phone;
-	public Long getIdkey() {
+	@Column(name = "managerid")
+	private int managerid;
+	@Column(name = "departmentid")
+	private int departmentid;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="userlocationid" )
+	@NotFound(action=NotFoundAction.IGNORE)
+	private Apilocationsqlobj userslocation;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="userdeptid")
+	@NotFound(action=NotFoundAction.IGNORE)	
+	private Apidepartments userdept; 
+	
+	public int getIdkey() {
 		return idkey;
 	}
 	public int getUserID() {
@@ -59,7 +79,7 @@ public class freshapiuserobj {
 	public String getPhone() {
 		return phone;
 	}
-	public void setIdkey(Long idkey) {
+	public void setIdkey(int idkey) {
 		this.idkey = idkey;
 	}
 	public void setUserID(int userID) {
@@ -86,6 +106,30 @@ public class freshapiuserobj {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	public Apilocationsqlobj getUserslocation() {
+		return userslocation;
+	}
+	public void setUserslocation(Apilocationsqlobj userslocation) {
+		this.userslocation = userslocation;
+	}
 	
-
+	
+	public int getManagerid() {
+		return managerid;
+	}
+	public void setManagerid(int managerid) {
+		this.managerid = managerid;
+	}
+	public int getDepartmentid() {
+		return departmentid;
+	}
+	public void setDepartmentid(int departmentid) {
+		this.departmentid = departmentid;
+	}
+	public Apidepartments getUserdept() {
+		return userdept;
+	}
+	public void setUserdept(Apidepartments userdept) {
+		this.userdept = userdept;
+	}
 }
