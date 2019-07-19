@@ -1,4 +1,4 @@
-package com.FreshUpdater.ADbringer;
+package com.FreshUpdater.Appworker;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -14,9 +14,8 @@ import javax.naming.directory.SearchResult;
 import javax.naming.ldap.InitialLdapContext;
 import javax.naming.ldap.LdapContext;
 
+import com.FreshUpdater.Appconfig.Appconfig;
 import com.FreshUpdater.Models.Aduserobject;
-import com.FreshUpdater.RestQuery.Hiberexec;
-import com.FreshUpdater.appconfig.Appconfig;
 
 public class ADconnection {
 

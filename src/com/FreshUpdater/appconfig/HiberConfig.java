@@ -1,4 +1,4 @@
-package com.FreshUpdater.appconfig;
+package com.FreshUpdater.Appconfig;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -9,10 +9,11 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-import com.FreshUpdater.Models.Aduserhibernateobj;
-import com.FreshUpdater.Models.Apidepartments;
-import com.FreshUpdater.Models.Apilocationsqlobj;
-import com.FreshUpdater.Models.Freshapiuserobj;
+import com.FreshUpdate.HiberModels.Aduserhibernateobj;
+import com.FreshUpdate.HiberModels.Apiagent;
+import com.FreshUpdate.HiberModels.Apidepartments;
+import com.FreshUpdate.HiberModels.Apilocationsqlobj;
+import com.FreshUpdate.HiberModels.Freshapiuserobj;
 
 
 public class HiberConfig {
@@ -47,6 +48,7 @@ public class HiberConfig {
 			newconf.addAnnotatedClass(Aduserhibernateobj.class);
 			newconf.addAnnotatedClass(Apilocationsqlobj.class);
 			newconf.addAnnotatedClass(Apidepartments.class);
+			newconf.addAnnotatedClass(Apiagent.class);
 			
 			newregistry = new StandardServiceRegistryBuilder().applySettings(newconf.getProperties()).build();
 			SessionFactory sessionFactory = newconf.buildSessionFactory(newregistry);

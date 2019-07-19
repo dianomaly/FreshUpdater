@@ -1,4 +1,4 @@
-package com.FreshUpdater.RestQuery;
+package com.FreshUpdater.Appworker;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -18,11 +18,11 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import com.FreshUpdater.Models.Aduserhibernateobj;
+import com.FreshUpdate.HiberModels.Aduserhibernateobj;
+import com.FreshUpdater.Appconfig.Appconfig;
 import com.FreshUpdater.Models.Apideptpostobject;
 import com.FreshUpdater.Models.Apiuserpostobj;
 import com.FreshUpdater.Models.Apiuserputobj;
-import com.FreshUpdater.appconfig.Appconfig;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -90,7 +90,8 @@ public class Apicaller {
 		}
 
 	}
-
+	
+	//Get a user by email filter.
 	public void useremailfilterupdate(List<String> alladuserobj) {
 		try {
 			setGetapifilterurl(Appconfig.loadapiuserurl() + Appconfig.loadUsersFilter());
@@ -127,7 +128,8 @@ public class Apicaller {
 			System.err.println(e);
 		}
 	}
-
+	
+	//Get all depts from freshservice
 	public void allapidepts() {
 		try {
 			setAlldeptsapiurl(Appconfig.loadDeptUrl());
@@ -152,7 +154,8 @@ public class Apicaller {
 			e.printStackTrace();
 		}
 	}
-
+	
+	//Parse json user object from freshservice api rest call
 	public void jsonuserresponsereader(CloseableHttpResponse newresponse) {
 		// Accepts HTTP response and parses the json object then commits relevant
 		// response to mysqltable.
@@ -186,6 +189,8 @@ public class Apicaller {
 		}
 
 	}
+	
+	//Parse json agent user object from freshservice api rest call
 	public void jsonagentsresponsereader(CloseableHttpResponse newresponse) {
 		// Accepts HTTP response and parses the json object then commits relevant
 		// response to mysqltable.
@@ -202,7 +207,7 @@ public class Apicaller {
 					boolean nodeval = objNode.get("email").asText().equals("null");
 
 					if (!nodeval) {
-						Hiberexec.setapisqluser(objNode.get("id").asInt(), objNode.get("first_name").asText(),
+						Hiberexec.setagentsqluser(objNode.get("id").asInt(), objNode.get("first_name").asText(),
 								objNode.get("last_name").asText(), objNode.get("email").asText(), objNode.get("job_title").asText(),
 								objNode.get("work_phone_number").asText(), objNode.get("location_id").asInt(),
 								objNode.get("reporting_manager_id").asInt());
@@ -218,6 +223,7 @@ public class Apicaller {
 		}
 
 	}
+	
 	public CloseableHttpResponse allapideptsget() {
 		try {
 			HttpGet newget = new HttpGet(alldeptsapiurl);

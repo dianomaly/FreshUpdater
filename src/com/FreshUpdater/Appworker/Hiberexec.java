@@ -1,4 +1,4 @@
-package com.FreshUpdater.RestQuery;
+package com.FreshUpdater.Appworker;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,14 +12,16 @@ import javax.persistence.criteria.Root;
 import org.apache.http.client.ClientProtocolException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import com.FreshUpdater.Models.Aduserhibernateobj;
-import com.FreshUpdater.Models.Apidepartments;
+
+import com.FreshUpdate.HiberModels.Aduserhibernateobj;
+import com.FreshUpdate.HiberModels.Apiagent;
+import com.FreshUpdate.HiberModels.Apidepartments;
+import com.FreshUpdate.HiberModels.Apilocationsqlobj;
+import com.FreshUpdate.HiberModels.Freshapiuserobj;
+import com.FreshUpdater.Appconfig.HiberConfig;
 import com.FreshUpdater.Models.Apideptpostobject;
-import com.FreshUpdater.Models.Apilocationsqlobj;
 import com.FreshUpdater.Models.Apiuserpostobj;
 import com.FreshUpdater.Models.Apiuserputobj;
-import com.FreshUpdater.Models.Freshapiuserobj;
-import com.FreshUpdater.appconfig.HiberConfig;
 
 public class Hiberexec {
 	private String apicityname;
@@ -69,6 +71,7 @@ public class Hiberexec {
 		newuser.setPhone(phone);
 		newuser.setManagerid(managerid);
 		newuser.setDepartmentid(departmentid);
+		
 		@SuppressWarnings("rawtypes")
 		org.hibernate.query.Query apilocquery = session
 				.createQuery("select user.id from Apilocationsqlobj as user where user.apiid = :apiidvar")
@@ -143,7 +146,79 @@ public class Hiberexec {
 		HiberConfig.shutdown();
 
 	}
+	
+	public static void setagentsqluser(int userID, String first_name, String last_name, String email, String job_title, String phone, int locationid, int managerid)
+			throws HibernateException, IOException {
 
+		Session session = HiberConfig.getSession().openSession();
+		session.beginTransaction();
+
+		Apiagent newuser = new Apiagent();
+		newuser.setApiid(userID);
+		newuser.setFirst_name(first_name);
+		newuser.setLast_name(last_name);
+		newuser.setEmail(email);
+		newuser.setJob_title(job_title);
+		newuser.setLocation_id(locationid);
+		newuser.setWork_phone_number(phone);
+		newuser.setReporting_manager_id(managerid);
+		
+		@SuppressWarnings("rawtypes")
+		org.hibernate.query.Query apilocquery = session
+				.createQuery("select user.id from Apilocationsqlobj as user where user.apiid = :apiidvar")
+				.setParameter("apiidvar", locationid);
+		if (!apilocquery.list().isEmpty()) {
+			int apilocid = Integer.valueOf(apilocquery.list().get(0).toString());
+			System.out.println(apilocid);
+			// System.out.println(apiuserquery.list().get(1).toString());
+			newuser.setApilocation(session.load(Apilocationsqlobj.class, apilocid));
+		}
+
+
+		@SuppressWarnings("rawtypes")
+		org.hibernate.query.Query validatequery = session
+				.createQuery("select user.email from Apiagent as user where user.email = :objuser")
+				.setParameter("objuser", newuser.getEmail());
+		System.out.println(validatequery.list());
+
+		if ((validatequery.list().isEmpty())) {
+
+			session.save(newuser);
+			session.getTransaction().commit();
+			session.close();
+		} else {
+
+			org.hibernate.query.Query getapisqlid = session
+					.createQuery("select user.id from Apiagent as user where user.email = :objuser")
+					.setParameter("objuser", newuser.getEmail());
+			int apiuseridint = Integer.valueOf(getapisqlid.list().get(0).toString());
+			Apiagent updateapiuser = session.load(Apiagent.class, apiuseridint);
+
+			updateapiuser.setApiid(userID);
+			updateapiuser.setFirst_name(first_name);
+			updateapiuser.setLast_name(last_name);
+			updateapiuser.setJob_title(job_title);
+			updateapiuser.setLocation_id(locationid);
+			updateapiuser.setWork_phone_number(phone);
+			updateapiuser.setReporting_manager_id(managerid);	
+
+			if (!apilocquery.list().isEmpty()) {
+				int apilocval = Integer.valueOf(apilocquery.list().get(0).toString());
+
+				System.out.println(apilocval);
+				updateapiuser.setApilocation(session.load(Apilocationsqlobj.class, apilocval));
+			}
+
+			
+			session.update(updateapiuser);
+			session.getTransaction().commit();
+			session.close();
+		}
+
+		HiberConfig.shutdown();
+
+	}
+	
 	public static void setadusersqlobj(String fullname, String cityname, String firstname, String lastname,
 			String upname, String department, String manager, String useremail, String titlename,
 			String distinguishedname, String sAMAccountName, String phonenumber)
@@ -165,7 +240,6 @@ public class Hiberexec {
 		newaduser.setUseremail(useremail);
 		newaduser.setsAMAccountName(sAMAccountName);
 		newaduser.setPhonenumber(phonenumber);
-
 		System.out.println(useremail);
 		System.out.println(upname);
 		org.hibernate.query.Query apiuserquery = session
@@ -176,6 +250,16 @@ public class Hiberexec {
 			System.out.println(apiuserid);
 			// System.out.println(apiuserquery.list().get(1).toString());
 			newaduser.setNewapiuser(session.load(Freshapiuserobj.class, apiuserid));
+		}
+		
+		org.hibernate.query.Query apiagentuserquery = session
+				.createQuery("select user.id from Apiagent as user where user.email = :email")
+				.setParameter("email", useremail);
+		if (!apiagentuserquery.list().isEmpty()) {
+			int apiagentuserid = Integer.valueOf(apiagentuserquery.list().get(0).toString());
+			System.out.println("agent id =" + apiagentuserid);
+			// System.out.println(apiuserquery.list().get(1).toString());
+			newaduser.setNewagent(session.load(Apiagent.class, apiagentuserid));
 		}
 		org.hibernate.query.Query validatequery = session
 				.createQuery(
@@ -205,6 +289,13 @@ public class Hiberexec {
 
 				updateuser.setNewapiuser(session.load(Freshapiuserobj.class, apiuserid));
 
+			}
+			
+			if (!apiagentuserquery.list().isEmpty()) {
+				int apiagentuserid = Integer.valueOf(apiagentuserquery.list().get(0).toString());
+				System.out.println("agent id =" + apiagentuserid);
+				// System.out.println(apiuserquery.list().get(1).toString());
+				updateuser.setNewagent(session.load(Apiagent.class, apiagentuserid));
 			}
 			session.update(updateuser);
 			session.getTransaction().commit();
@@ -339,7 +430,7 @@ public class Hiberexec {
 				System.out.println("Job Title: " + adu.getTitlename() + " = " + adu.getNewapiuser().getJobtitle());
 				System.out.println("Phone Number: " + worknumberval + " = " + adu.getNewapiuser().getPhone());
 				System.out.println("Location ID: " + adlocationval + " = " + adu.getNewapiuser().getLocationid());
-				System.out.println("Maneger ID: " + manageridval + " = " + adu.getNewapiuser().getManagerid());
+				System.out.println("Manager ID: " + manageridval + " = " + adu.getNewapiuser().getManagerid());
 				System.out.println("API user ID: " + adu.getNewapiuser().getUserID());
 
 				if (adu.getFirstname() != String.valueOf(adu.getNewapiuser().getFirst_name())

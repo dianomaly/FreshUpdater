@@ -1,4 +1,4 @@
-package com.FreshUpdater.Models;
+package com.FreshUpdate.HiberModels;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,7 +16,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 @Entity
-@Table(name = "alladusers")
+@Table(name = "alladuserstb")
 public class Aduserhibernateobj {
 	@Id
 	@GeneratedValue(generator="increment")
@@ -51,7 +51,10 @@ public class Aduserhibernateobj {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="apiuserid")
 	private Freshapiuserobj newapiuser;
-
+	@NotFound(action = NotFoundAction.IGNORE)
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "agentuserid")
+	private Apiagent newagent;
 	public Aduserhibernateobj() {
 		}
 	public int getId() {
@@ -139,6 +142,12 @@ public class Aduserhibernateobj {
 	public void setPhonenumber(String phonenumber) {
 		this.phonenumber = phonenumber;
 	}
-	
+	public Apiagent getNewagent() {
+		return newagent;
+	}
+
+	public void setNewagent(Apiagent newagent) {
+		this.newagent = newagent;
+	}
 	
 }

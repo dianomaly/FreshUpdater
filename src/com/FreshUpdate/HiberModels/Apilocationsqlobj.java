@@ -1,4 +1,4 @@
-package com.FreshUpdater.Models;
+package com.FreshUpdate.HiberModels;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

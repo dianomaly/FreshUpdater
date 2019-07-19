@@ -1,4 +1,4 @@
-package com.FreshUpdater.appconfig;
+package com.FreshUpdater.Appconfig;
 
 import java.io.FileInputStream;
 import java.io.IOException;
